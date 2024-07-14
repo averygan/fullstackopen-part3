@@ -60,8 +60,10 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 const generateId = () => {
-  return Math.floor(Math.random() * 10000)
+  return String(Math.floor(Math.random() * 10000))
 }
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postrequest'))
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
@@ -70,6 +72,9 @@ app.post('/api/persons', (request, response) => {
       error: 'name and/or number missing'
     })
   }
+
+  morgan.token('postrequest', function (request, response) 
+  {return JSON.stringify(request.body)})
 
   if (persons.some(p => p.name === body.name)) {
     return response.status(409).json({
