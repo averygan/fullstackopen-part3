@@ -41,6 +41,16 @@ app.get('/info', (request, response) => {
         <p>${currTime}</p>`)
 })
 
+app.get('/api/persons/:id', (request, response) => {
+    const id = request.params.id
+    const person = persons.find(person => person.id === id)
+    if (person) {
+        response.send(person)
+    } else {
+        response.status(404).end()
+    }
+})
+
 // const generateId = () => {
 //     const maxId = persons.length > 0
 //         ? Math.max(...persons.map(n=> Number(n.id))) : 0
