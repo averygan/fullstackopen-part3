@@ -9,29 +9,29 @@ app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
 
-morgan.token('postrequest', function (request, response) 
+morgan.token('postrequest', function (request, response)
 {return JSON.stringify(request.body)})
 
 app.use(morgan('tiny'))
 
 app.get('/', (request, response) => {
-    response.send('<h1>Hello Phonebook!</h1>')
-  })
-  
+  response.send('<h1>Hello Phonebook!</h1>')
+})
+
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons => {
-      response.json(persons)
-    })
+  Person.find({}).then(persons => {
+    response.json(persons)
   })
+})
 
 app.get('/info', (request, response, next) => {
-    Person.countDocuments()
-      .then(count => {
-        const currTime = Date()
-        response.send(`<p>Phonebook has info for ${count} people</p>
+  Person.countDocuments()
+    .then(count => {
+      const currTime = Date()
+      response.send(`<p>Phonebook has info for ${count} people</p>
         <p>${currTime}</p>`)
-      })
-      .catch(error => next(error))
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -46,12 +46,12 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    Person.findByIdAndDelete(request.params.id)
-      .then(result => {
-        response.status(204).end()
-      })
-      .catch(error => next(error))
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 const generateId = () => {
@@ -71,9 +71,9 @@ app.post('/api/persons', (request, response, next) => {
 
   person.save()
     .then(savedPerson => {
-    response.json(savedPerson)
-  })
-  .catch(error => next(error))
+      response.json(savedPerson)
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -114,5 +114,5 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
